@@ -19,17 +19,6 @@ exports.UR = function(n) {
 
 }
 
-exports.hex_to_arrbuf = function(hexstr) {
-
-  var buf = [];
-  for(var i = 0; i < hexstr.length; i+=2)
-      buf.push(parseInt(hexstr.substring(i, i + 2), 16));
-
-  buf = new Uint8Array(buf);
-  return buf.buffer;
-
-}
-
 exports.str_to_uint8arr = function (str) {
     // from https://gist.github.com/lihnux/2aa4a6f5a9170974f6aa
 
@@ -100,44 +89,3 @@ exports.uint8arr_to_str = (function () {
         return result.join('');
     };
 })();
-
-exports.uint8arr_to_int = function (array) {
-    // from https://stackoverflow.com/questions/39346517/convert-uint8arrayn-into-integer-in-node-js
-
-	var length = array.length;
-
-	let buffer = Buffer.from(array);
-	var result = buffer.readUIntBE(0, length);
-
-	return result;
-}
-
-exports.locate_diffs = function (buf1, buf2) {
-
-    var a = new Uint8Array(buf1);
-    var b = new Uint8Array(buf2);
-
-    var f_loc = null;
-    var l_loc = null;
-    var range = Math.min(a.byteLength, b.byteLength);
-
-    for (var i = 0; i < range; i++) {
-        if (a[i] !== b[i]) {
-            if (f_loc === null) f_loc = i;
-            l_loc = i;
-        }
-    }
-
-    return [f_loc, l_loc];
-
-}
-
-exports.format_str = function() {
-	var retstr = "";
-	for (var k in arguments) {
-		if (retstr != "")
-			retstr += ", ";
-		retstr += arguments[k];
-	}
-	return retstr;
-}
