@@ -1,4 +1,4 @@
-# Strings and File JS mutator
+# Strings and Files JS mutator
 
 This is a strings and files mutator written on node js.
 
@@ -25,7 +25,7 @@ Check out folder for results.
 
 Put sample file(s) into directory.
 
-Replace <text> that you want to mutate to {{<text>}}.
+Replace `text` that you want to mutate to {{`text`}}.
 
 Then run command to smart mutate:
 
