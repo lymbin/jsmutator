@@ -13,7 +13,7 @@
 
  */
  
-var __version__ = "0.3";
+var __version__ = "0.4";
 
 var mutator = require("./mutator.js");
 var utils = require("./utils.js");
@@ -80,7 +80,7 @@ function findAndMutate(fullData, mutateCycles) {
 		}
 		str = utils.uint8arr_to_str(returnBuf);
 		var regexp2 = RegExp(`{{(${match[1]})}}`,'g'); 
-		returnStr = returnStr.replace("{{server1}}", str);
+		returnStr = returnStr.replace("{{" + match[1] + "}}", str);
 	}
 	return returnStr;
 }
