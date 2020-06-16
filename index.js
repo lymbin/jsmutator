@@ -13,14 +13,14 @@
 
  */
  
-var __version__ = "0.2";
+var __version__ = "0.3";
 
 var mutator = require("./mutator.js");
 var utils = require("./utils.js");
 const fs = require('fs');
 path = require('path');
 
-const outdir = './out/';
+const outdir = '/out/';
 const outFileNameBase = 'out';
 const startSmartMutateSymbol = '{{';
 const endSmartMutateSymbol = '}}';
@@ -48,10 +48,25 @@ if (argc < 4 || (process.argv[2] != '-f' && process.argv[2] != '-s')) {
 var smart = process.argv[2] == '-s';
 var filesDir = process.argv[3];
 
-if (argc == 5)
+if (argc > 4)
 	mutateOutFilesCount = Number(process.argv[4]);
-if (argc == 6)
+
+if (argc > 5)
 	mutateMaxCyclesCount = Number(process.argv[5]);
+
+console.info('\n >>> Smart JS Mutator ' + __version__ + '\n');
+if (smart)
+	console.info(' >>> Smart mutate: On');
+console.info(' >>> Out files count: ' + mutateOutFilesCount);
+console.info(' >>> Max mutate cycles: ' + mutateMaxCyclesCount + '\n');
+
+const createDir = (dirPath) => {
+	fs.mkdirSync(process.cwd() + dirPath, { recursive: true }, (error) => {
+		if (error) {
+			console.error('An error occurred: ', error);
+		}
+	});
+}
 
 function findAndMutate(fullData, mutateCycles) {
 	var returnStr = fullData;
@@ -60,14 +75,13 @@ function findAndMutate(fullData, mutateCycles) {
 	for (const match of matches) {
 		var str = '';
 		var returnBuf = mutator.mutate_havoc(utils.str_to_uint8arr(match[1]));
-		for (var j = 0; j < mutateCycles; j++) {
+		for (var j = 1; j < mutateCycles; j++) {
 			returnBuf = mutator.mutate_havoc(returnBuf);
 		}
 		str = utils.uint8arr_to_str(returnBuf);
 		var regexp2 = RegExp(`{{(${match[1]})}}`,'g'); 
 		returnStr = returnStr.replace("{{server1}}", str);
 	}
-	console.log(returnStr);
 	return returnStr;
 }
 
@@ -76,6 +90,9 @@ fs.readdir(filesDir, (err, files) => {
 		console.info('Folder ' + filesDir + ' not holds any files');
 		process.exit();
 	}
+	createDir(outdir);
+	console.info('Start mutating process...');
+	
 	files.forEach(file => {	
 		var outFile;
 		filePath = path.join(filesDir, file);
@@ -92,19 +109,16 @@ fs.readdir(filesDir, (err, files) => {
 
 					if (smart) {
 						str = findAndMutate(data, cyclesCount);
-						//console.log(str);
 					}
 					else {
 						var returnBuf = mutator.mutate_havoc(utils.str_to_uint8arr(data));
-						for (var j = 0; j < cyclesCount; j++) {
+						for (var j = 1; j < cyclesCount; j++) {
 							returnBuf = mutator.mutate_havoc(returnBuf);
 						}
 						str = utils.uint8arr_to_str(returnBuf);
-						console.log(str);
 					}
 
-					
-					var filePathOut = path.join(outdir, outFile);
+					var filePathOut = path.join(process.cwd(), outdir, outFile);
 					fs.writeFile(filePathOut, str, function (err) {
 						if (err) return console.log(err);
 					});
@@ -114,4 +128,5 @@ fs.readdir(filesDir, (err, files) => {
 			}
 		});
 	});
+	console.info('...end mutating process');
 });
