@@ -80,7 +80,7 @@ function findAndMutate(fullData, mutateCycles) {
 		}
 		str = utils.uint8arr_to_str(returnBuf);
 		var regexp2 = RegExp(`{{(${match[1]})}}`,'g'); 
-		returnStr = returnStr.replace("{{server1}}", str);
+		returnStr = returnStr.replace("{{" + match[1] + "}}", str);
 	}
 	return returnStr;
 }
