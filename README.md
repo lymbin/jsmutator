@@ -1,6 +1,6 @@
 # Strings and File JS mutator
 
-This is string and file mutator written on node js.
+This is a strings and files mutator written on node js.
 
 It has full file mode and smart strings mode.
 
