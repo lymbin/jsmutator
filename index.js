@@ -13,7 +13,7 @@
 
  */
  
-var __version__ = "0.4";
+var __version__ = "1.0";
 
 var mutator = require("./mutator.js");
 var utils = require("./utils.js");
@@ -38,6 +38,7 @@ var argc = process.argv.length;
 
 if (argc < 4 || (process.argv[2] != '-f' && process.argv[2] != '-s')) {
 	console.info('Smart JS Mutator ' + __version__);
+	console.info('Made by @lymbin');
 	console.info('');
 	console.info('Usage:');
 	console.info('node index.js -f <folder with files> <out_files_count>(default:10) <mutate_cycles>(default:2)');
@@ -54,7 +55,7 @@ if (argc > 4)
 if (argc > 5)
 	mutateMaxCyclesCount = Number(process.argv[5]);
 
-console.info('\n >>> Smart JS Mutator ' + __version__ + '\n');
+console.info('\n >>> Smart JS Mutator ' + __version__ + ' by @lymbin\n');
 if (smart)
 	console.info(' >>> Smart mutate: On');
 console.info(' >>> Out files count: ' + mutateOutFilesCount);
@@ -87,7 +88,7 @@ function findAndMutate(fullData, mutateCycles) {
 
 fs.readdir(filesDir, (err, files) => {
 	if (files == undefined || files.length == 0) {
-		console.info('Folder ' + filesDir + ' not holds any files');
+		console.info('Folder \'' + filesDir + '\' not holds any files');
 		process.exit();
 	}
 	createDir(outdir);
